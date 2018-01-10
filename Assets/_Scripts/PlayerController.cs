@@ -10,14 +10,32 @@ public class Boundary {
 public class PlayerController : MonoBehaviour {
 
     public Rigidbody rb;
+
+    // movement publics
     public float speed;
     public Boundary boundary;
     public float tilt;
 
-    void Start() {
+    // shooting publics
+    public GameObject shot;
+    public Transform shotSpawn;
+    public float fireRate;
 
+    private float nextFire = 0.0f; // make sure you can fire again until time has passed this value
+
+
+    void Start() {
+        // get the Rigidbody from the object
         rb = GetComponent<Rigidbody>();
 
+    }
+
+    void Update() {
+
+        if (Input.GetButton("Fire1") && Time.time > nextFire) {
+            nextFire = Time.time + fireRate; // update the time we can fire again
+            Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+        }
     }
     // Used for physics, called automatically just before each fixed physics step
     void FixedUpdate() {
@@ -34,6 +52,7 @@ public class PlayerController : MonoBehaviour {
             Mathf.Clamp(rb.position.z, boundary.zMin, boundary.zMax)
         ); 
 
+        // tilt the ship when moving
         rb.rotation = Quaternion.Euler(0.0f, 0.0f, (rb.velocity.x * -tilt));
     }
  	
