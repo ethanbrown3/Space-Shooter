@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour {
     public GameObject shot;
     public Transform shotSpawn;
     public float fireRate;
+    public AudioSource weaponAudio;
 
     private float nextFire = 0.0f; // make sure you can fire again until time has passed this value
 
@@ -27,14 +28,16 @@ public class PlayerController : MonoBehaviour {
     void Start() {
         // get the Rigidbody from the object
         rb = GetComponent<Rigidbody>();
+        weaponAudio = GetComponent<AudioSource>();
 
     }
 
     void Update() {
-
+        // shots fired
         if (Input.GetButton("Fire1") && Time.time > nextFire) {
             nextFire = Time.time + fireRate; // update the time we can fire again
             Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+            weaponAudio.Play();
         }
     }
     // Used for physics, called automatically just before each fixed physics step
