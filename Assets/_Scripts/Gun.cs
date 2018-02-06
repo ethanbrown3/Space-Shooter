@@ -15,10 +15,9 @@ public class Gun : MonoBehaviour
 	public bool isSpread = false;
 	private float nextFire = 0.0f; // make sure you can fire again until time has passed this value
 	private float timeRapid, timeSpread;
-	private float defaultFireRate;
+
 	void Start() {
 		weaponAudio = GetComponent<AudioSource>();
-		defaultFireRate = fireRate;
 	}
 
 	void Update() {
@@ -33,7 +32,6 @@ public class Gun : MonoBehaviour
 	// doubles the fire rate
 	public void pickupRapid() {
 		isRapid = true;
-		fireRate = fireRate/2.0f;
 		timeRapid = 0;
 	}
 
@@ -43,7 +41,7 @@ public class Gun : MonoBehaviour
 	}
 
 	void fireGun() {
-		nextFire = Time.time + fireRate; // update the time we can fire again
+		nextFire = (isRapid) ? Time.time + (fireRate/2) : Time.time + fireRate; // update the time we can fire again
 		createBolt();
 		weaponAudio.Play();
 		if (isSpread) {
