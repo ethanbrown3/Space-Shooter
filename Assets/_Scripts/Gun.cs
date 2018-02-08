@@ -30,12 +30,12 @@ public class Gun : MonoBehaviour
 	}
 
 	// doubles the fire rate
-	public void pickupRapid() {
+	public void PickupRapid() {
 		isRapid = true;
 		timeRapid = 0;
 	}
 
-	public void pickupSpread() {
+	public void PickupSpread() {
 		isSpread = true;
 		timeSpread = 0;
 	}
