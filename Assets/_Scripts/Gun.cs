@@ -10,11 +10,14 @@ public class Gun : MonoBehaviour
 	public Transform shotSpawn3;
 	public float fireRate;
 	public AudioSource weaponAudio;
+	public float upgradeTime = 10;
 
 	public bool isRapid = false;
 	public bool isSpread = false;
+
 	private float nextFire = 0.0f; // make sure you can fire again until time has passed this value
-	private float timeRapid, timeSpread;
+	private float timeRapid = 0.0f;
+	private float timeSpread = 0.0f;
 
 	void Start() {
 		weaponAudio = GetComponent<AudioSource>();
@@ -25,19 +28,24 @@ public class Gun : MonoBehaviour
 		if (Input.GetButton("Fire1") && Time.time > nextFire) {
 			fireGun ();
 		}
-
+		if (Time.time > timeSpread) {
+			isSpread = false;
+		}
+		if (Time.time > timeRapid) {
+			isRapid = false;
+		}
 
 	}
 
 	// doubles the fire rate
-	public void PickupRapid() {
-		isRapid = true;
-		timeRapid = 0;
-	}
-
-	public void PickupSpread() {
-		isSpread = true;
-		timeSpread = 0;
+	public void Upgrade(UpgradePickup pickup) {
+		if (pickup.CompareTag("rapidPickup")) {
+			isRapid = true;
+			timeRapid = Time.time + upgradeTime;
+		} else if (pickup.CompareTag("spreadPickup")) {
+			isSpread = true;
+			timeSpread = Time.time + upgradeTime;
+		}
 	}
 
 	void fireGun() {

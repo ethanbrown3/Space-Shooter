@@ -7,11 +7,14 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour {
 
     public GameObject[] hazards;
+	public GameObject[] powerups;
     public Vector3 spawnValues;
     public float spawnWait;
     public float startWait;
     public float waveWait;
+	public float pickUpSpawnFrequency;
     public int hazardCount;
+	public Gun playerGun;
 
     public Text scoreText;
     public Text restartText;
@@ -47,14 +50,27 @@ public class GameController : MonoBehaviour {
                 Vector3 spawnPosition = new Vector3(Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
                 Quaternion spawnRotation = Quaternion.identity;
                 Instantiate(hazard, spawnPosition, spawnRotation);
-                
+
+				if (Random.value > 1-pickUpSpawnFrequency) {
+					SpawnPickup ();
+				}
                 yield return new WaitForSeconds(spawnWait);
             }
+
             yield return new WaitForSeconds(waveWait);
         }
         restartText.text = "Press 'R' to Restart";
         restart = true;
     }
+
+	private void SpawnPickup () {
+		GameObject pickup = powerups[Random.Range(0, powerups.Length)];
+		Vector3 spawnPosition = new Vector3(Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+		Quaternion spawnRotation = Quaternion.identity;
+		UpgradePickup upgrade = pickup.GetComponent<UpgradePickup>();
+		upgrade.gun = playerGun;
+		Instantiate(pickup, spawnPosition, spawnRotation);
+	}
 
     void UpdateScoreText () {
         scoreText.text = "Score: " + score.ToString();

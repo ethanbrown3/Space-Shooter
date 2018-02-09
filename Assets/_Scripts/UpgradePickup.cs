@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UpgradeRapid : MonoBehaviour {
+public class UpgradePickup : MonoBehaviour {
 	public Gun gun;
 
 	private void OnTriggerEnter(Collider other) {
-		if (other.tag.Equals ("Player")) {
-			gun.PickupRapid ();
+		if (other.CompareTag("Player")) {
+			gun.Upgrade (this);
 			Destroy (gameObject);
 		}
 	}
