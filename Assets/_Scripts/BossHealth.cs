@@ -27,7 +27,7 @@ public class BossHealth : MonoBehaviour {
     }
 
     void Update() {
-        if ((timeHit + hitRecovery) < Time.time) {
+        if (timeHit + hitRecovery < Time.time && GetComponent<BossMovement>().isInPosition == true) {
             isHitable = true;
         }
     }
@@ -40,6 +40,7 @@ public class BossHealth : MonoBehaviour {
         if (other.CompareTag("Player")) {
             Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
             gameController.GameOver();
+            Destroy(other.gameObject);
         }
 
 		if (other.CompareTag("Bolt")) {
@@ -48,7 +49,8 @@ public class BossHealth : MonoBehaviour {
 			animator.SetTrigger ("TakingDamage");
             isHitable = false;
             timeHit = Time.time;
-		}
+            gameController.AddScore(Mathf.RoundToInt(damage)*5);
+        }
         
 		if (health <= 0) {
 			gameController.AddScore(scoreValue);
