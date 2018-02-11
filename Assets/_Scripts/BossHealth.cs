@@ -9,7 +9,12 @@ public class BossHealth : MonoBehaviour {
     public GameObject playerExplosion;
 	public float health = 25.0f;
     public int scoreValue;
+    public float hitRecovery;
+
     private GameController gameController;
+    private float timeHit;
+    private bool isHitable;
+
 
     void Start() {
         GameObject gameControllerObject = GameObject.FindWithTag("GameController");
@@ -21,8 +26,14 @@ public class BossHealth : MonoBehaviour {
         }
     }
 
+    void Update() {
+        if ((timeHit + hitRecovery) < Time.time) {
+            isHitable = true;
+        }
+    }
+
     void OnTriggerEnter(Collider other) {
-		if (other.CompareTag("Boundary") || other.CompareTag("Enemy") || other.CompareTag("rapidPickup") ||  other.CompareTag("spreadPickup")) {
+		if (!isHitable || other.CompareTag("Boundary") || other.CompareTag("Enemy") || other.CompareTag("rapidPickup") ||  other.CompareTag("spreadPickup")) {
             return;
         }
 			
@@ -35,6 +46,8 @@ public class BossHealth : MonoBehaviour {
 			float damage = (other.transform.localScale.x * 2.0f);
 			health -= damage;
 			animator.SetTrigger ("TakingDamage");
+            isHitable = false;
+            timeHit = Time.time;
 		}
         
 		if (health <= 0) {
