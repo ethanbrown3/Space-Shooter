@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DestroyByContact : MonoBehaviour {
+public class BossBolt : MonoBehaviour {
 
     public GameObject explosion;
     public GameObject playerExplosion;
     public int scoreValue;
-    private GameController gameController;
+	private GameController gameController;
 
     void Start() {
         GameObject gameControllerObject = GameObject.FindWithTag("GameController");
@@ -20,7 +20,7 @@ public class DestroyByContact : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider other) {
-		if (other.CompareTag("Boundary") || other.CompareTag("Enemy") || other.CompareTag("rapidPickup") ||  other.CompareTag("spreadPickup")) {
+		if (other.CompareTag("Boundary") || other.CompareTag("Enemy") || other.CompareTag("rapidPickup") ||  other.CompareTag("spreadPickup") || other.CompareTag("Bolt")) {
             return;
         }
 
@@ -31,10 +31,9 @@ public class DestroyByContact : MonoBehaviour {
         if (other.CompareTag("Player")) {
             Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
             gameController.GameOver();
-			Destroy(other.gameObject);
         }
 
         gameController.AddScore(scoreValue);
-        Destroy(gameObject);
+        Destroy(other.gameObject);
     }
 }

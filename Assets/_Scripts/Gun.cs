@@ -75,9 +75,10 @@ public class Gun : MonoBehaviour
 			if (chargeDamage > maxCharge) {
 				chargeDamage = maxCharge;
 			}
-			createBolt ();
 			GameObject bolt = Instantiate(chargeShot, shotSpawn.position, shotSpawn.rotation);
 			bolt.transform.localScale = new Vector3(chargeDamage/2.0f, chargeDamage/2.0f, chargeDamage/2.0f);
+			SphereCollider myCollider = bolt.transform.GetComponent<SphereCollider>();
+			myCollider.radius = chargeDamage/10.0f;
 			shot.transform.position = shotSpawn.position;
 			weaponAudio.Play();
 		}		
