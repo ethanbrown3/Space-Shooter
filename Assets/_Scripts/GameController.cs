@@ -48,6 +48,8 @@ public class GameController : MonoBehaviour {
             isBoss = true;
             hazardCount = 0;
             SpawnBoss();
+        } else if (isBoss && playerGun.chargesLeft <= 0) {
+            bossText.text = "Out of charges";  
         }
     }
 
