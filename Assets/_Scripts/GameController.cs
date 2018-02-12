@@ -8,18 +8,22 @@ public class GameController : MonoBehaviour {
 
     public GameObject[] hazards;
 	public GameObject[] powerups;
+    public GameObject boss;
     public Vector3 spawnValues;
     public float spawnWait;
     public float startWait;
     public float waveWait;
 	public float pickUpSpawnFrequency;
     public int hazardCount;
+    public int lastWave;
 	public Gun playerGun;
 
     public Text scoreText;
     public Text restartText;
     public Text gameOverText;
+    public Text bossText;
 
+    private bool isBoss = false;
     private bool gameOver;
     private bool restart;
     private int score;
@@ -29,6 +33,7 @@ public class GameController : MonoBehaviour {
         restart = false;
         restartText.text = "";
         gameOverText.text = "";
+        bossText.text = "";
         score = 0;
         StartCoroutine(SpawnWaves());
         UpdateScoreText();
@@ -39,6 +44,10 @@ public class GameController : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.R)) {
                 SceneManager.LoadScene("Main");
             }
+        } else if (lastWave <= 0 && !isBoss) {
+            isBoss = true;
+            hazardCount = 0;
+            SpawnBoss();
         }
     }
 
@@ -56,11 +65,21 @@ public class GameController : MonoBehaviour {
 				}
                 yield return new WaitForSeconds(spawnWait);
             }
-
             yield return new WaitForSeconds(waveWait);
+            --lastWave;
+            
         }
+        Debug.Log("Game Over");
         restartText.text = "Press 'R' to Restart";
         restart = true;
+    }
+
+    void SpawnBoss() {
+        playerGun.canCharge = true;
+        bossText.text = "Boss Fight! Hold Right Click to Charge Shot";
+        Vector3 spawnPosition = new Vector3(0.0f, 0.0f, 22.25f);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(boss, spawnPosition, spawnRotation);
     }
 
 	private void SpawnPickup () {
@@ -83,6 +102,11 @@ public class GameController : MonoBehaviour {
 
     public void GameOver () {
         gameOverText.text = "Game Over";
+        gameOver = true;
+    }
+
+    public void Win() {
+        gameOverText.text = "You Win\n" + "Your Score: " + scoreText.text;
         gameOver = true;
     }
 }

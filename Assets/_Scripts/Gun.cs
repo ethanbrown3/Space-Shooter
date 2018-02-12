@@ -16,8 +16,10 @@ public class Gun : MonoBehaviour
 	public float chargeRate;
 	public float chargeDamage;
 	public float startCharge;
+    public int chargesLeft = 2;
 
-	public bool isRapid = false;
+
+    public bool isRapid = false;
 	public bool isSpread = false;
 	public bool canCharge = false;
 
@@ -71,7 +73,8 @@ public class Gun : MonoBehaviour
 			startCharge = Time.time;
 		}
 		if (Input.GetMouseButtonUp (1)) {
-			chargeDamage = (Time.time - startCharge) * chargeRate;
+            chargesLeft--;
+            chargeDamage = (Time.time - startCharge) * chargeRate;
 			if (chargeDamage > maxCharge) {
 				chargeDamage = maxCharge;
 			}

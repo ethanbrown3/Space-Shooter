@@ -59,6 +59,7 @@ public class BossHealth : MonoBehaviour {
 			if (explosion != null) {
 				Instantiate(explosion, transform.position, transform.rotation);
 			}
+            gameController.Win();
 
 		}
 

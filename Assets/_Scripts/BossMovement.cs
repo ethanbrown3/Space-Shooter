@@ -7,7 +7,6 @@ public class BossMovement : MonoBehaviour {
     public float tilt;
     public float smoothing;
     public float dodge;
-
     public Vector2 startWait;
     public Vector2 maneuverTime;
     public Vector2 maneuverWiat;
@@ -28,12 +27,8 @@ public class BossMovement : MonoBehaviour {
         startPoint = transform.position;
         endPoint = new Vector3(0.0f, 0.0f, 12.0f);
         startTime = Time.time;
-        if (Random.value < 0.5f) {
-            StartCoroutine(Evade());
-        } else {
-            Debug.Log("waving");
-            StartCoroutine(Wave());
-        }
+        StartCoroutine(Evade());
+
     }
   
     IEnumerator Evade() {
@@ -49,19 +44,10 @@ public class BossMovement : MonoBehaviour {
     }
 
     void Update() {
-        if (Time.time < 6.0f) {
+        if (Time.time < startTime + 6.0f) {
             transform.position = Vector3.Lerp(startPoint, endPoint, (Time.time - startTime) / 5.0f);
         } else {
             isInPosition = true;
-            wave = Mathf.Sin(Time.time * 8) * dodge;
-        }
-    }
-
-    IEnumerator Wave() {
-        float startDirection = Mathf.Sign(transform.position.x);
-        while (true) {
-            targetManeuver = wave * startDirection;
-            yield return new WaitForSeconds(Random.Range(maneuverTime.x, maneuverTime.y));
         }
     }
 
