@@ -12,12 +12,14 @@ public class BossHealth : MonoBehaviour {
     public float hitRecovery;
 
     private GameController gameController;
+	private float startingHealth;
     private float timeHit;
     private bool isHitable;
 
 
     void Start() {
         GameObject gameControllerObject = GameObject.FindWithTag("GameController");
+		startingHealth = health;
 		if (gameControllerObject != null) {
             gameController = gameControllerObject.GetComponent<GameController>();
         }
@@ -46,6 +48,9 @@ public class BossHealth : MonoBehaviour {
 		if (other.CompareTag("Bolt")) {
 			float damage = (other.transform.localScale.x * 2.0f);
 			health -= damage;
+			if (health <= startingHealth / 2.0f) {
+				animator.SetBool ("HalfHealth", true);
+			}
 			animator.SetTrigger ("TakingDamage");
             isHitable = false;
             timeHit = Time.time;
