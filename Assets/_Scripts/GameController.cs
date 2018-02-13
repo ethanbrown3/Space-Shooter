@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour {
     public Text gameOverText;
     public Text bossText;
 
+    private float gameOverTime;
     private bool isBoss = false;
     private bool gameOver;
     private bool restart;
@@ -40,16 +41,15 @@ public class GameController : MonoBehaviour {
     }
 
     void Update () {
-        if (restart) {
-            if (Input.GetKeyDown(KeyCode.R)) {
-                SceneManager.LoadScene("Main");
-            }
-        } else if (lastWave <= 0 && !isBoss) {
+        if (lastWave <= 0 && !isBoss) {
             isBoss = true;
             hazardCount = 0;
             SpawnBoss();
         } else if (isBoss && playerGun.chargesLeft <= 0) {
             bossText.text = "Out of charges";  
+        }
+        if (gameOver && (Time.time > gameOverTime + 5.0f)) {
+            SceneManager.LoadScene(0);
         }
     }
 
@@ -71,9 +71,6 @@ public class GameController : MonoBehaviour {
             --lastWave;
             
         }
-        Debug.Log("Game Over");
-        restartText.text = "Press 'R' to Restart";
-        restart = true;
     }
 
     void SpawnBoss() {
@@ -105,10 +102,12 @@ public class GameController : MonoBehaviour {
     public void GameOver () {
         gameOverText.text = "Game Over";
         gameOver = true;
+        gameOverTime = Time.time;
     }
 
     public void Win() {
         gameOverText.text = "You Win\n" + "Your Score: " + scoreText.text;
         gameOver = true;
+        gameOverTime = Time.time;
     }
 }
