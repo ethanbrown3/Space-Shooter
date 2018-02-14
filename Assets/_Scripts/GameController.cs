@@ -26,12 +26,10 @@ public class GameController : MonoBehaviour {
     private float gameOverTime;
     private bool isBoss = false;
     private bool gameOver;
-    private bool restart;
     private int score;
 
     void Start () {
         gameOver = false;
-        restart = false;
         restartText.text = "";
         gameOverText.text = "";
         bossText.text = "";
@@ -49,7 +47,8 @@ public class GameController : MonoBehaviour {
             bossText.text = "Out of charges";  
         }
         if (gameOver && (Time.time > gameOverTime + 5.0f)) {
-            SceneManager.LoadScene(0);
+			PlayerPrefs.SetInt("Score", score);
+			SceneManager.LoadScene(2);
         }
     }
 
@@ -100,14 +99,15 @@ public class GameController : MonoBehaviour {
     }
 
     public void GameOver () {
-        gameOverText.text = "Game Over";
         gameOver = true;
         gameOverTime = Time.time;
+		PlayerPrefs.SetString("Game Over", "You Lose");
     }
 
     public void Win() {
-        gameOverText.text = "You Win\n" + "Your Score: " + scoreText.text;
         gameOver = true;
         gameOverTime = Time.time;
+		PlayerPrefs.SetString("Game Over", "You Win!");
+
     }
 }
